@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import './pages/add.dart';
+import './pages/about.dart';
+import './pages/search.dart';
+import './pages/contact.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,8 +31,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int _currentIndex = 0;
+
+
+  final List<Widget> _pages = [
+    WebView(
+      initialUrl: "https://ege.esnturkey.org",
+      javascriptMode: JavascriptMode.unrestricted,
+    ),
+    SearchPage(),
+    AddPage(),
+    AboutPage(),
+    ContactPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(),
-      ),
+      body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
