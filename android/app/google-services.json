@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "677887236430",
+    "firebase_url": "https://lecturematching.firebaseio.com",
+    "project_id": "lecturematching",
+    "storage_bucket": "lecturematching.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677887236430:android:db1594d04814992a14a61f",
+        "android_client_info": {
+          "package_name": "com.safa.universityapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677887236430-gom9igikn9imqjl13vcld9f9h2giarel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZlKZxZM-LaTxeU6R7ABumMLyr8sGQ4Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677887236430-gom9igikn9imqjl13vcld9f9h2giarel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

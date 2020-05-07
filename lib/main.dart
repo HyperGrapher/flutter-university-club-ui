@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import './pages/welcome.dart';
 import './pages/add.dart';
 import './pages/about.dart';
 import './pages/search.dart';
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'University App'),
+      debugShowCheckedModeBanner: false,
+      home:  WelcomePage(),
+      routes: {
+        '/home': (context) => MyHomePage(title: 'ESN Ege Lecture Matching'),
+      },
     );
   }
 }
