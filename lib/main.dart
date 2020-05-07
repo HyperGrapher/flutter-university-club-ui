@@ -6,7 +6,8 @@ import './pages/add.dart';
 import './pages/about.dart';
 import './pages/search.dart';
 import './pages/contact.dart';
-
+import './pages/about_sub_page.dart';
+import './pages/data/text.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -21,6 +22,11 @@ class MyApp extends StatelessWidget {
       home:  WelcomePage(),
       routes: {
         '/home': (context) => MyHomePage(title: 'ESN Ege Lecture Matching'),
+        '/library': (context) => AboutSubPage(PageText().library["title"], PageText().library["body"]),
+        '/health': (context) => AboutSubPage(PageText().health["title"], PageText().health["body"]),
+        '/pool': (context) => AboutSubPage(PageText().pool["title"], PageText().pool["body"]),
+        '/gym': (context) => AboutSubPage(PageText().gym["title"], PageText().gym["body"]),
+        '/dining': (context) => AboutSubPage(PageText().dining["title"], PageText().dining["body"]),
       },
     );
   }

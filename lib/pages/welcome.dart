@@ -11,7 +11,7 @@ class WelcomePage extends StatelessWidget {
     if (uid == 0) {
       print("No Previous UID, generating new one");
       Random random = new Random();
-      int randomUID = random.nextInt(1000000); 
+      int randomUID = random.nextInt(1000000);
       await prefs.setInt('uid', randomUID);
       print("Generated UID: $randomUID");
     } else {
@@ -22,22 +22,21 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.amber[300],
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             SizedBox(
-              height: 20,
+              height: 40,
             ),
             Container(
               child: Image.asset(
                 'assets/images/logo.png',
-                width: 250.0,
+                width: 185.0,
               ),
             ),
             Container(
               padding: EdgeInsets.all(12.0),
-              width: 250.0,
+              width: 300.0,
               height: 250.0,
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -67,7 +66,13 @@ class WelcomePage extends StatelessWidget {
                       _createUID();
                       Navigator.pushNamed(context, '/home');
                     },
-                    child: Text("Welcome"),
+                    child: Text(
+                      "Welcome",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.0,
+                      ),
+                    ),
                   ),
                 ),
               ],
