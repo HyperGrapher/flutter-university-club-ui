@@ -5,6 +5,9 @@ class DatabaseService {
   final CollectionReference lectureCollection =
       Firestore.instance.collection('lectures');
 
+  final CollectionReference messagesCollection =
+      Firestore.instance.collection('messages');
+
   // int uid = 0;
 
   // _getUID() async {
@@ -29,7 +32,11 @@ class DatabaseService {
       String eras_major,
       String eras_lecture_id,
       String eras_lecture_name) async {
-    return await lectureCollection.document().collection("$uid").document().setData({
+    return await lectureCollection
+        .document()
+        .collection("$uid")
+        .document()
+        .setData({
       'host_university': host_university,
       'host_department': host_department,
       'host_major': host_major,
@@ -40,6 +47,23 @@ class DatabaseService {
       'eras_major': eras_major,
       'eras_lecture_id': eras_lecture_id,
       'eras_lecture_name': eras_lecture_name,
+    });
+  }
+
+  Future sendContactForm(
+    int uid,
+    String name,
+    String email,
+    String message,
+  ) async {
+    return await messagesCollection
+        .document()
+        .collection("$uid")
+        .document()
+        .setData({
+      'name': name,
+      'email': email,
+      'message': message,
     });
   }
 }
