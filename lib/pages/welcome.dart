@@ -23,62 +23,62 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        SizedBox(
+          height: 40,
+        ),
+        Container(
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 185.0,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.all(12.0),
+          width: 300.0,
+          height: 250.0,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              border: Border.all(
+            color: Colors.black26,
+            width: 2.0,
+            style: BorderStyle.solid,
+          )),
+          child: Text(
+            "Lecture Matching",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 50.0,
+            ),
+          ),
+        ),
+        Stack(
+          alignment: Alignment.center,
           children: <Widget>[
-            SizedBox(
-              height: 40,
-            ),
-            Container(
-              child: Image.asset(
-                'assets/images/logo.png',
-                width: 185.0,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(12.0),
-              width: 300.0,
-              height: 250.0,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                color: Colors.black26,
-                width: 2.0,
-                style: BorderStyle.solid,
-              )),
-              child: Text(
-                "Lecture Matching",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 50.0,
-                ),
-              ),
-            ),
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                BottomBars(),
-                Center(
-                  child: RaisedButton(
-                    color: Colors.white,
-                    textColor: Colors.black,
-                    padding: EdgeInsets.fromLTRB(34.0, 12.0, 34.0, 12.0),
-                    onPressed: () {
-                      _createUID();
-                      Navigator.pushNamed(context, '/home');
-                    },
-                    child: Text(
-                      "Welcome",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.0,
-                      ),
-                    ),
+            BottomBars(),
+            Center(
+              child: RaisedButton(
+                color: Colors.white,
+                textColor: Colors.black,
+                padding: EdgeInsets.fromLTRB(34.0, 12.0, 34.0, 12.0),
+                onPressed: () {
+                  _createUID();
+                  Navigator.pushNamed(context, '/home');
+                },
+                child: Text(
+                  "Welcome",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
                   ),
                 ),
-              ],
+              ),
             ),
           ],
-        ));
+        ),
+      ],
+    ));
   }
 }
 
@@ -88,37 +88,27 @@ class BottomBars extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        Expanded(
-          child: Container(
-            color: Colors.blueAccent,
-            height: 185.0,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.amber,
-            height: 185.0,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.purple,
-            height: 185.0,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.lightGreen,
-            height: 185.0,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.deepOrange,
-            height: 185.0,
-          ),
-        ),
+        ColorBar(Colors.blueAccent),
+        ColorBar(Colors.amber),
+        ColorBar(Colors.purple),
+        ColorBar(Colors.lightGreen),
+        ColorBar(Colors.deepOrange),
       ],
+    );
+  }
+}
+
+class ColorBar extends StatelessWidget {
+  final color;
+  const ColorBar(this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: color,
+        height: 185.0,
+      ),
     );
   }
 }
