@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import './pages/welcome.dart';
-import './pages/add.dart';
+import './pages/add_lecture.dart';
 import './pages/about.dart';
 import './pages/search.dart';
 import './pages/contact.dart';
@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       javascriptMode: JavascriptMode.unrestricted,
     ),
     SearchPage(),
-    AddPage(),
+    LectureForm(),
     AboutPage(),
     ContactPage(),
   ];
