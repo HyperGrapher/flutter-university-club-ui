@@ -7,58 +7,48 @@ class LectureForm extends StatefulWidget {
 
 class _LectureFormState extends State<LectureForm> {
   final formKey = GlobalKey<FormState>();
-  String host_university,
-      host_department,
-      host_major,
-      host_lecture_id,
-      host_lecture_name,
-      eras_university,
-      eras_department,
-      eras_major,
-      eras_lecture_id,
-      eras_lecture_name,
-      year,
-      semestr;
 
-  _saveForm(
-      String host_university,
-      String host_department,
-      String host_major,
-      String host_lecture_id,
-      String host_lecture_name,
-      String eras_university,
-      String eras_department,
-      String eras_major,
-      String eras_lecture_id,
-      String eras_lecture_name,
-      String year,
-      String semestr) {
+  String semester = '';
+  String year = "Please choose academic year"; // initial value
+  String _hostUniversity,
+      _hostDepartment,
+      _hostMajor,
+      _hostLectureId,
+      _hostLectureName,
+      _erasUniversity,
+      _erasDepartment,
+      _erasMajor,
+      _erasLectureId,
+      _erasLectureName;
+
+  void _handleRadioValueChange1(String value) {
+    setState(() {
+      semester = value;
+      print("Radio value $value");
+    });
+  }
+
+  void _handleDropDown(String value) {
+    setState(() {
+      year = value;
+      print("Dropdown value $value");
+    });
+  }
+
+  void _saveForm() {
     print("- - - - > Form saved");
+    if (formKey.currentState.validate()) {
+      formKey.currentState.save(); // save forms
+
+      print("Host Uni: $_hostUniversity");
+      print("Host Department: $_hostDepartment");
+      print("year: $year");
+      print("semester: $semester");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    void _submit() {
-      if (formKey.currentState.validate()) {
-        formKey.currentState.save(); // save forms
-        _saveForm(
-            host_university,
-            host_department,
-            host_major,
-            host_lecture_id,
-            host_lecture_name,
-            eras_university,
-            eras_department,
-            eras_major,
-            eras_lecture_id,
-            eras_lecture_name,
-            year,
-            semestr);
-        formKey.currentState.reset(); // clear forms
-        print("- - - - > Form submitted");
-      }
-    }
-
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(18.0),
@@ -81,6 +71,17 @@ class _LectureFormState extends State<LectureForm> {
                 SizedBox(
                   height: 20,
                 ),
+                Text(
+                  "Host University",
+                  style: new TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+                Divider(height: 5.0, color: Colors.black),
+                SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   decoration: InputDecoration(
                     filled: true,
@@ -90,7 +91,7 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => host_university = value,
+                  onSaved: (String value) => _hostUniversity = value,
                 ),
                 SizedBox(
                   height: 20,
@@ -104,7 +105,7 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => host_department = value,
+                  onSaved: (String value) => _hostDepartment = value,
                 ),
                 SizedBox(
                   height: 20,
@@ -118,7 +119,7 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => host_major = value,
+                  onSaved: (String value) => _hostMajor = value,
                 ),
                 SizedBox(
                   height: 20,
@@ -132,8 +133,19 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => host_lecture_name = value,
+                  onSaved: (String value) => _hostLectureName = value,
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Erasmus University",
+                  style: new TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+                Divider(height: 5.0, color: Colors.black),
                 SizedBox(
                   height: 20,
                 ),
@@ -146,7 +158,7 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => eras_university = value,
+                  onSaved: (String value) => _erasUniversity = value,
                 ),
                 SizedBox(
                   height: 20,
@@ -160,7 +172,7 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => eras_department = value,
+                  onSaved: (String value) => _erasDepartment = value,
                 ),
                 SizedBox(
                   height: 20,
@@ -174,7 +186,7 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => eras_major = value,
+                  onSaved: (String value) => _erasMajor = value,
                 ),
                 SizedBox(
                   height: 20,
@@ -188,7 +200,60 @@ class _LectureFormState extends State<LectureForm> {
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
-                  onSaved: (String value) => eras_lecture_name = value,
+                  onSaved: (String value) => _erasLectureName = value,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: DropdownButton<String>(
+                    items: <String>['2019', '2020', '2021', '2022']
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: _handleDropDown,
+                    hint: Text(year),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    'Semester',
+                    style: new TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Radio(
+                      value: "Fall",
+                      groupValue: semester,
+                      onChanged: _handleRadioValueChange1,
+                    ),
+                    Text(
+                      'Fall',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    Radio(
+                      value: "Spring",
+                      groupValue: semester,
+                      onChanged: _handleRadioValueChange1,
+                    ),
+                    Text(
+                      'Spring',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 20,
@@ -198,9 +263,12 @@ class _LectureFormState extends State<LectureForm> {
                   color: Colors.blue,
                   textColor: Colors.white,
                   padding: EdgeInsets.fromLTRB(68.0, 12.0, 68.0, 12.0),
-                  onPressed: _submit,
+                  onPressed: _saveForm,
                   child: Text("Save Lecture"),
-                ))
+                )),
+                SizedBox(
+                  height: 30,
+                ),
               ]),
         ),
       ),

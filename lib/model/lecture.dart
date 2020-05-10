@@ -10,6 +10,8 @@ class Lecture {
   String eras_major;
   String eras_lecture_id;
   String eras_lecture_name;
+  String year;
+  String semester;
 
   Lecture(
       {this.id,
@@ -22,5 +24,8 @@ class Lecture {
       this.eras_department,
       this.eras_major,
       this.eras_lecture_id,
-      this.eras_lecture_name});
+      this.eras_lecture_name,
+      this.year,
+      this.semester
+      });
 }
