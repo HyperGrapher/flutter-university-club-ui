@@ -70,14 +70,12 @@ class DatabaseService {
       '${lec.year}',
       '${lec.semester}'
     ]);
-    print("- - - - - - -> Creating new Lecture. Result: $result");
 
     return result;
   }
 
   Future<List<Lecture>> queryLecture(String search) async {
     final db = await database;
-    print("- - - - - - -> Serching for word ($search)");
     final sql = '''
       SELECT * FROM lectures WHERE host_university LIKE '%$search%' 
       union
@@ -92,7 +90,6 @@ class DatabaseService {
       SELECT * FROM lectures WHERE eras_lecture_name LIKE '%$search%' 
     ''';
     var result = await db.rawQuery(sql);
-    print("- - - - -> DB Result Count: ${result.length}");
     List<Lecture> lectures = List();
 
     for (final node in result) {
@@ -105,7 +102,6 @@ class DatabaseService {
 
   Future<List<Lecture>> queryAll() async {
     final db = await database;
-    print("- - - - - - -> Query all");
     var result = await db.rawQuery('''SELECT * FROM lectures''');
     List<Lecture> lectures = List();
 
@@ -116,20 +112,4 @@ class DatabaseService {
 
     return lectures;
   }
-
-  Future dropTable() async {
-    final db = await database;
-    print("- - - - - - -> Drop table");
-    var result = await db.rawQuery('''
-        DROP TABLE lectures;
-    ''');
-
-    return result;
-  }
 }
-
-/**
- *     SELECT * from lectures WHERE host_department like ? order by columnA limit 100
-    union
-    SELECT * from lectures WHERE host_lecture_name like ? order by columnA limit 100
- */

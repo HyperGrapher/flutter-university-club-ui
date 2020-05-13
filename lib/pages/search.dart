@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:universityapp/model/lecture.dart';
+import 'package:universityapp/pages/detail.dart';
 import 'package:universityapp/services/database.dart';
 
 class SearchPage extends StatefulWidget {
@@ -12,8 +13,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<List<Lecture>> lectureList;
   String query;
 
-  Future<List<Lecture>> findSingle() async {
-    print("findSingle() ");
+  Future<List<Lecture>> findQuery() async {
     final response = await DatabaseService.db.queryLecture(query);
     return response;
   }
@@ -27,9 +27,8 @@ class _SearchPageState extends State<SearchPage> {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       setState(() {
-        lectureList = findSingle();
+        lectureList = findQuery();
       });
-      // formKey.currentState.reset();
     } else {
       setState(() {
         lectureList = getAll();
@@ -64,6 +63,16 @@ class _SearchPageState extends State<SearchPage> {
                           leading: Icon(Icons.info),
                           title: Text(data.host_university),
                           subtitle: Text(data.eras_university),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPage(
+                                  data: data,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       );
                     }));
@@ -110,7 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                           onPressed: () => {
                             setState(() {
                               lectureList = getAll();
-                            formKey.currentState.reset();
+                              formKey.currentState.reset();
                             })
                           },
                           child: Text("RESET"),

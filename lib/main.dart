@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:universityapp/pages/detail.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import './pages/welcome.dart';

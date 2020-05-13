@@ -60,11 +60,6 @@ class _LectureFormState extends State<LectureForm> {
 
       DatabaseService.db.saveLecture(data);
 
-      print("Host Uni: $_hostUniversity");
-      print("Host Department: $_hostDepartment");
-      print("Year: $_year");
-      print("_semester: $_semester");
-
       Fluttertoast.showToast(
           msg: "Lecture is saved!",
           toastLength: Toast.LENGTH_SHORT,
@@ -83,12 +78,9 @@ class _LectureFormState extends State<LectureForm> {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(18.0),
-        // margin: EdgeInsets.only(top: 50.0),
-        // color: Colors.blueAccent,
         child: Form(
           key: formKey,
           child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
