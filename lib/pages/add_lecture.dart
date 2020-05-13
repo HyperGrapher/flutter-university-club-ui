@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:universityapp/model/lecture.dart';
+import 'package:universityapp/services/database.dart';
 
 class LectureForm extends StatefulWidget {
   @override
@@ -8,8 +11,7 @@ class LectureForm extends StatefulWidget {
 class _LectureFormState extends State<LectureForm> {
   final formKey = GlobalKey<FormState>();
 
-  String semester = '';
-  String year = "Please choose academic year"; // initial value
+  String _year = "Please choose academic _year"; // initial value
   String _hostUniversity,
       _hostDepartment,
       _hostMajor,
@@ -19,31 +21,60 @@ class _LectureFormState extends State<LectureForm> {
       _erasDepartment,
       _erasMajor,
       _erasLectureId,
-      _erasLectureName;
+      _erasLectureName,
+      _semester;
 
   void _handleRadioValueChange1(String value) {
     setState(() {
-      semester = value;
+      _semester = value;
       print("Radio value $value");
     });
   }
 
   void _handleDropDown(String value) {
     setState(() {
-      year = value;
+      _year = value;
       print("Dropdown value $value");
     });
   }
 
   void _saveForm() {
-    print("- - - - > Form saved");
+    print("- - - - > saveForm function");
     if (formKey.currentState.validate()) {
       formKey.currentState.save(); // save forms
 
+      var data = Lecture(
+        host_university: "$_hostUniversity",
+        host_department: "$_hostDepartment",
+        host_major: "$_hostMajor",
+        host_lecture_id: "$_hostLectureId",
+        host_lecture_name: "$_hostLectureName",
+        eras_university: "$_erasUniversity",
+        eras_department: "$_erasDepartment",
+        eras_major: "$_erasMajor",
+        eras_lecture_id: "$_erasLectureId",
+        eras_lecture_name: "$_erasLectureName",
+        year: "$_year",
+        semester: "$_semester"
+      );
+
+      DatabaseService.db.saveLecture(data);
+
       print("Host Uni: $_hostUniversity");
       print("Host Department: $_hostDepartment");
-      print("year: $year");
-      print("semester: $semester");
+      print("Year: $_year");
+      print("_semester: $_semester");
+
+      Fluttertoast.showToast(
+          msg: "Lecture is saved!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+      formKey.currentState.reset();
     }
   }
 
@@ -86,7 +117,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Host University",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -98,10 +129,9 @@ class _LectureFormState extends State<LectureForm> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(
-                    filled: true,
-                    hintText: "Host Department",
-                    fillColor: Colors.grey[300],
-                  ),
+                      filled: true,
+                      hintText: "Host Department",
+                      fillColor: Colors.lightBlue[50]),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
                   },
@@ -114,7 +144,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Host Major",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -128,7 +158,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Host Lecture",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -153,7 +183,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Erasmus University",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -167,7 +197,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Erasmus Department",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -181,7 +211,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Erasmus Major",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -195,7 +225,7 @@ class _LectureFormState extends State<LectureForm> {
                   decoration: InputDecoration(
                     filled: true,
                     hintText: "Erasmus Lecture",
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.lightBlue[50],
                   ),
                   validator: (String value) {
                     return value.isNotEmpty ? null : "Field can't be empty";
@@ -215,7 +245,7 @@ class _LectureFormState extends State<LectureForm> {
                       );
                     }).toList(),
                     onChanged: _handleDropDown,
-                    hint: Text(year),
+                    hint: Text(_year),
                   ),
                 ),
                 SizedBox(
@@ -235,7 +265,7 @@ class _LectureFormState extends State<LectureForm> {
                   children: <Widget>[
                     Radio(
                       value: "Fall",
-                      groupValue: semester,
+                      groupValue: _semester,
                       onChanged: _handleRadioValueChange1,
                     ),
                     Text(
@@ -246,7 +276,7 @@ class _LectureFormState extends State<LectureForm> {
                     ),
                     Radio(
                       value: "Spring",
-                      groupValue: semester,
+                      groupValue: _semester,
                       onChanged: _handleRadioValueChange1,
                     ),
                     Text(

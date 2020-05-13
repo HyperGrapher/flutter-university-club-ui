@@ -1,69 +1,135 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import "package:sqflite/sqlite_api.dart";
+import 'package:universityapp/model/lecture.dart';
 
 class DatabaseService {
-  final CollectionReference lectureCollection =
-      Firestore.instance.collection('lectures');
+  DatabaseService._();
 
-  final CollectionReference messagesCollection =
-      Firestore.instance.collection('messages');
+  // Sqflite
+  static DatabaseService db = DatabaseService._();
 
-  // int uid = 0;
+  static Database _database; // Sqlite database class
 
-  // _getUID() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   uid = (prefs.getInt('uid') ?? 0);
-  //   print('Firestore UID: $uid');
-  // }
+  Future<Database> get database async {
+    if (_database != null) return _database;
 
-  DatabaseService() {
-    // _getUID();
+    _database = await initDB();
+    return _database;
   }
 
-  Future updateData(
-      int uid,
-      String host_university,
-      String host_department,
-      String host_major,
-      String host_lecture_id,
-      String host_lecture_name,
-      String eras_university,
-      String eras_department,
-      String eras_major,
-      String eras_lecture_id,
-      String eras_lecture_name) async {
-    return await lectureCollection
-        .document()
-        .collection("$uid")
-        .document()
-        .setData({
-      'host_university': host_university,
-      'host_department': host_department,
-      'host_major': host_major,
-      'host_lecture_id': host_lecture_id,
-      'host_lecture_name': host_lecture_name,
-      'eras_university': eras_university,
-      'eras_department': eras_department,
-      'eras_major': eras_major,
-      'eras_lecture_id': eras_lecture_id,
-      'eras_lecture_name': eras_lecture_name,
-    });
+  initDB() async {
+    var dbpath = await getDatabasesPath();
+    print("- - - - - - -> InitDB. PAth : $dbpath");
+    return await openDatabase(join(await getDatabasesPath(), 'app.db'),
+        onCreate: (db, version) async {
+      print("- - - - - - -> InitDB-> onCreate");
+
+      await db.execute('''
+          CREATE TABLE IF NOT EXISTS lectures (
+            id INTEGER PRIMARY KEY, host_university TEXT, host_department TEXT,
+            host_major TEXT, host_lecture_id TEXT, host_lecture_name TEXT,
+            eras_university TEXT, eras_department TEXT, eras_major TEXT, eras_lecture_id TEXT,
+            eras_lecture_name TEXT, year TEXT, semester TEXT
+          )
+          ''');
+    }, version: 1);
   }
 
-  Future sendContactForm(
-    int uid,
-    String name,
-    String email,
-    String message,
-  ) async {
-    return await messagesCollection
-        .document()
-        .collection("$uid")
-        .document()
-        .setData({
-      'name': name,
-      'email': email,
-      'message': message,
-    });
+  saveLecture(Lecture lec) async {
+    final db = await database;
+
+    var result = await db.rawInsert('''
+      INSERT INTO lectures (
+      host_university,
+      host_department,
+      host_major,
+      host_lecture_id,
+      host_lecture_name,
+      eras_university,
+      eras_department,
+      eras_major,
+      eras_lecture_id,
+      eras_lecture_name, 
+      year,
+      semester
+      ) VALUES (
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+      )
+    ''', [
+      '${lec.host_university}',
+      '${lec.host_department}',
+      '${lec.host_major}',
+      '${lec.host_lecture_id}',
+      '${lec.host_lecture_name}',
+      '${lec.eras_university}',
+      '${lec.eras_department}',
+      '${lec.eras_major}',
+      '${lec.eras_lecture_id}',
+      '${lec.eras_lecture_name}',
+      '${lec.year}',
+      '${lec.semester}'
+    ]);
+    print("- - - - - - -> Creating new Lecture. Result: $result");
+
+    return result;
+  }
+
+  Future<List<Lecture>> queryLecture(String search) async {
+    final db = await database;
+    print("- - - - - - -> Serching for word ($search)");
+    final sql = '''
+      SELECT * FROM lectures WHERE host_university LIKE '%$search%' 
+      union
+      SELECT * FROM lectures WHERE eras_university LIKE '%$search%'
+      union
+      SELECT * FROM lectures WHERE host_department LIKE '%$search%'     
+      union
+      SELECT * FROM lectures WHERE eras_department LIKE '%$search%'     
+      union
+      SELECT * FROM lectures WHERE host_lecture_name LIKE '%$search%' 
+      union
+      SELECT * FROM lectures WHERE eras_lecture_name LIKE '%$search%' 
+    ''';
+    var result = await db.rawQuery(sql);
+    print("- - - - -> DB Result Count: ${result.length}");
+    List<Lecture> lectures = List();
+
+    for (final node in result) {
+      final lecture = Lecture.fromJson(node);
+      lectures.add(lecture);
+    }
+
+    return lectures;
+  }
+
+  Future<List<Lecture>> queryAll() async {
+    final db = await database;
+    print("- - - - - - -> Query all");
+    var result = await db.rawQuery('''SELECT * FROM lectures''');
+    List<Lecture> lectures = List();
+
+    for (final node in result) {
+      final lecture = Lecture.fromJson(node);
+      lectures.add(lecture);
+    }
+
+    return lectures;
+  }
+
+  Future dropTable() async {
+    final db = await database;
+    print("- - - - - - -> Drop table");
+    var result = await db.rawQuery('''
+        DROP TABLE lectures;
+    ''');
+
+    return result;
   }
 }
+
+/**
+ *     SELECT * from lectures WHERE host_department like ? order by columnA limit 100
+    union
+    SELECT * from lectures WHERE host_lecture_name like ? order by columnA limit 100
+ */

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:universityapp/services/database.dart';
+import 'package:universityapp/services/firestore.dart';
 
 class ContactPage extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _ContactPageState extends State<ContactPage> {
   _sendMessage(String name, String email, String message) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int uid = prefs.getInt('uid');
-    await DatabaseService().sendContactForm(uid, name, email, message);
+    await FirestoreService().sendContactForm(uid, name, email, message);
   }
 
   @override
@@ -24,6 +25,16 @@ class _ContactPageState extends State<ContactPage> {
       if (formKey.currentState.validate()) {
         formKey.currentState.save(); // save forms
         _sendMessage(_name, _email, _message);
+
+        Fluttertoast.showToast(
+            msg: "Your message is sent!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+
         formKey.currentState.reset(); // clear forms
         print("MESSAGE SENT");
       }
@@ -56,7 +67,7 @@ class _ContactPageState extends State<ContactPage> {
                     decoration: InputDecoration(
                       filled: true,
                       hintText: "Your Name",
-                      fillColor: Colors.grey[300],
+                      fillColor: Colors.lightBlue[50],
                     ),
                     validator: (String value) {
                       return value.length > 0 ? null : "Field can't be empty";
@@ -70,7 +81,7 @@ class _ContactPageState extends State<ContactPage> {
                     decoration: InputDecoration(
                       filled: true,
                       hintText: "Your E-Mail",
-                      fillColor: Colors.grey[300],
+                      fillColor: Colors.lightBlue[50],
                     ),
                     validator: (String value) {
                       return value.contains('@')
@@ -89,7 +100,7 @@ class _ContactPageState extends State<ContactPage> {
                       decoration: InputDecoration(
                         filled: true,
                         hintText: "Your Message",
-                        fillColor: Colors.grey[300],
+                        fillColor: Colors.lightBlue[50],
                       ),
                       validator: (String value) {
                         return value.length > 0 ? null : "Field can't be empty";
