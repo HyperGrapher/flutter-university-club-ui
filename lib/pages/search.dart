@@ -46,6 +46,9 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget projectWidget() {
     if (lectureList == null) return Container();
+    // databaseservice'deki queryAll db methodunyla donen Future
+    // FutureBuilder widget'indeki builder callback'i ile veri ulasinca 
+    // listedeki her item icin bir sira Card widget'i olusturuyor.
     return FutureBuilder(
         future: lectureList,
         builder: (context, AsyncSnapshot snapshot) {
